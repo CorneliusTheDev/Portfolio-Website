@@ -88,89 +88,30 @@
         <span class="section-tag">02 / Projects</span>
         <h2 class="section-title">My <span class="accent">Projects</span></h2>
       </div>
-      <div class="projects-grid">
+      <div class="projects-grid projects-grid--single">
 
-        <div class="project-card">
-          <div class="project-img">
-            <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&q=80" alt="E-Commerce" />
-            <div class="project-overlay">
-              <a href="#" class="project-link-btn">View Project →</a>
+        <div class="project-card project-card--featured">
+          <div class="project-img project-img--carousel">
+            <div class="carousel" id="aymiaCarousel">
+              <div class="carousel-track" id="aymiaTrack">
+                <img src="Aymia Project photo/Screenshot (2).png" alt="Aymia Project – 1" />
+                <img src="Aymia Project photo/Screenshot (3).png" alt="Aymia Project – 2" />
+                <img src="Aymia Project photo/Screenshot (4).png" alt="Aymia Project – 3" />
+                <img src="Aymia Project photo/Screenshot (5).png" alt="Aymia Project – 4" />
+                <img src="Aymia Project photo/Screenshot (6).png" alt="Aymia Project – 5" />
+                <img src="Aymia Project photo/Screenshot (7).png" alt="Aymia Project – 6" />
+                <img src="Aymia Project photo/Screenshot (8).png" alt="Aymia Project – 7" />
+                <img src="Aymia Project photo/Screenshot (9).png" alt="Aymia Project – 8" />
+              </div>
+              <button class="carousel-btn carousel-btn--prev" id="aymiaPrev" aria-label="Previous">&#8249;</button>
+              <button class="carousel-btn carousel-btn--next" id="aymiaNext" aria-label="Next">&#8250;</button>
+              <div class="carousel-dots" id="aymiaDots"></div>
             </div>
           </div>
           <div class="project-info">
-            <div class="project-tags"><span>React</span><span>Node.js</span></div>
-            <h3>E-Commerce Platform</h3>
-            <p>A full-featured online store with cart, payment integration and admin dashboard built with React and Node.js.</p>
-          </div>
-        </div>
-
-        <div class="project-card">
-          <div class="project-img">
-            <img src="https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=600&q=80" alt="Task App" />
-            <div class="project-overlay">
-              <a href="#" class="project-link-btn">View Project →</a>
-            </div>
-          </div>
-          <div class="project-info">
-            <div class="project-tags"><span>JavaScript</span><span>Firebase</span></div>
-            <h3>Task Manager App</h3>
-            <p>A productivity app with real-time sync, drag-and-drop task boards and user authentication via Firebase.</p>
-          </div>
-        </div>
-
-        <div class="project-card">
-          <div class="project-img">
-            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&q=80" alt="Analytics Dashboard" />
-            <div class="project-overlay">
-              <a href="#" class="project-link-btn">View Project →</a>
-            </div>
-          </div>
-          <div class="project-info">
-            <div class="project-tags"><span>React</span><span>Python</span></div>
-            <h3>Analytics Dashboard</h3>
-            <p>Interactive data visualization dashboard with charts, filters and real-time data updates for business insights.</p>
-          </div>
-        </div>
-
-        <div class="project-card">
-          <div class="project-img">
-            <img src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=600&q=80" alt="Blog Platform" />
-            <div class="project-overlay">
-              <a href="#" class="project-link-btn">View Project →</a>
-            </div>
-          </div>
-          <div class="project-info">
-            <div class="project-tags"><span>Next.js</span><span>MongoDB</span></div>
-            <h3>Blog Platform</h3>
-            <p>A modern blogging platform with markdown support, SEO optimization and a clean reading experience.</p>
-          </div>
-        </div>
-
-        <div class="project-card">
-          <div class="project-img">
-            <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&q=80" alt="Fitness App" />
-            <div class="project-overlay">
-              <a href="#" class="project-link-btn">View Project →</a>
-            </div>
-          </div>
-          <div class="project-info">
-            <div class="project-tags"><span>React Native</span><span>API</span></div>
-            <h3>Fitness Tracker</h3>
-            <p>A mobile-first fitness tracking app with workout plans, progress charts and nutrition logging features.</p>
-          </div>
-        </div>
-
-        <div class="project-card">
-          <div class="project-img">
-            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80" alt="Portfolio" />
-            <div class="project-overlay">
-              <a href="#" class="project-link-btn">View Project →</a>
-            </div>
-          </div>
-          <div class="project-info">
-            <div class="project-tags"><span>HTML/CSS</span><span>JS</span></div>
-            <h3>Portfolio Website</h3>
-            <p>A responsive personal portfolio website with smooth animations, dark theme and modern UI/UX design.</p>
+            <div class="project-tags"><span>Web App</span><span>UI/UX</span><span>Full-Stack</span></div>
+            <h3>Aymia Project</h3>
+            <p>A comprehensive web application featuring a modern interface, intuitive user experience and robust functionality — built from scratch with attention to detail and performance.</p>
           </div>
         </div>
 
@@ -223,6 +164,20 @@
       </div>
     </div>
   </footer>
+
+  <!-- ===== PROJECT MODAL ===== -->
+  <div class="modal-backdrop" id="projectModal" role="dialog" aria-modal="true" aria-label="Project Preview">
+    <div class="modal-box">
+      <button class="modal-close" id="modalClose" aria-label="Close">&#10005;</button>
+      <div class="modal-slider">
+        <div class="modal-track" id="modalTrack"></div>
+        <button class="modal-arrow modal-arrow--prev" id="modalPrev" aria-label="Previous">&#8249;</button>
+        <button class="modal-arrow modal-arrow--next" id="modalNext" aria-label="Next">&#8250;</button>
+        <div class="modal-counter" id="modalCounter"></div>
+      </div>
+      <div class="modal-dots" id="modalDots"></div>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>
