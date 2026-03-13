@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dev Forges – Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <header class="navbar">
+    <div class="container nav-inner">
+      <a href="#" class="logo">
+        <span class="logo-bracket">&lt;</span>Dev Forges<span class="logo-bracket">/&gt;</span>
+      </a>
+      <nav class="nav-links">
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <button class="burger" id="burger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#about" onclick="closeMenu()">About</a>
+      <a href="#projects" onclick="closeMenu()">Projects</a>
+      <a href="#contact" onclick="closeMenu()">Contact</a>
+    </div>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="container hero-content">
+      <p class="hero-tag">Hello, I'm</p>
+      <h1 class="hero-name">Nurlan <span class="accent">Allahverdiyev</span></h1>
+      <h2 class="hero-title">Full-Stack Developer</h2>
+      <p class="hero-desc">I build modern, fast and responsive web applications that users love.</p>
+      <div class="hero-btns">
+        <a href="#projects" class="btn btn-primary">View Projects</a>
+        <a href="#contact" class="btn btn-outline">Contact Me</a>
+      </div>
+    </div>
+    <div class="hero-scroll">
+      <div class="scroll-dot"></div>
+    </div>
+  </section>
+
+  <!-- ===== ABOUT ===== -->
+  <section class="section" id="about">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">01 / About</span>
+        <h2 class="section-title">About <span class="accent">Me</span></h2>
+      </div>
+      <div class="about-grid">
+        <div class="about-avatar">
+          <div class="avatar-frame">
+            <img src="upwork profile picture.png" alt="Nurlan Allahverdiyev" style="width:100%;height:100%;object-fit:cover;" />
+          </div>
+          <div class="avatar-glow"></div>
+        </div>
+        <div class="about-text">
+          <p>I'm a passionate <strong>software developer</strong> focused on creating clean, efficient and user-friendly web experiences. With a strong foundation in both front-end and back-end technologies, I bring ideas to life through code.</p>
+          <p>I enjoy turning complex problems into simple, beautiful and intuitive solutions. When I'm not coding, I'm constantly learning new technologies and improving my craft.</p>
+          <div class="skills-grid">
+            <div class="skill-item"><span class="skill-dot"></span>HTML / CSS</div>
+            <div class="skill-item"><span class="skill-dot"></span>JavaScript</div>
+            <div class="skill-item"><span class="skill-dot"></span>React</div>
+            <div class="skill-item"><span class="skill-dot"></span>Node.js</div>
+            <div class="skill-item"><span class="skill-dot"></span>Python</div>
+            <div class="skill-item"><span class="skill-dot"></span>Git / GitHub</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PROJECTS ===== -->
+  <section class="section section-dark" id="projects">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">02 / Projects</span>
+        <h2 class="section-title">My <span class="accent">Projects</span></h2>
+      </div>
+      <div class="projects-grid">
+
+        <div class="project-card">
+          <div class="project-img">
+            <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&q=80" alt="E-Commerce" />
+            <div class="project-overlay">
+              <a href="#" class="project-link-btn">View Project →</a>
+            </div>
+          </div>
+          <div class="project-info">
+            <div class="project-tags"><span>React</span><span>Node.js</span></div>
+            <h3>E-Commerce Platform</h3>
+            <p>A full-featured online store with cart, payment integration and admin dashboard built with React and Node.js.</p>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-img">
+            <img src="https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=600&q=80" alt="Task App" />
+            <div class="project-overlay">
+              <a href="#" class="project-link-btn">View Project →</a>
+            </div>
+          </div>
+          <div class="project-info">
+            <div class="project-tags"><span>JavaScript</span><span>Firebase</span></div>
+            <h3>Task Manager App</h3>
+            <p>A productivity app with real-time sync, drag-and-drop task boards and user authentication via Firebase.</p>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-img">
+            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&q=80" alt="Analytics Dashboard" />
+            <div class="project-overlay">
+              <a href="#" class="project-link-btn">View Project →</a>
+            </div>
+          </div>
+          <div class="project-info">
+            <div class="project-tags"><span>React</span><span>Python</span></div>
+            <h3>Analytics Dashboard</h3>
+            <p>Interactive data visualization dashboard with charts, filters and real-time data updates for business insights.</p>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-img">
+            <img src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=600&q=80" alt="Blog Platform" />
+            <div class="project-overlay">
+              <a href="#" class="project-link-btn">View Project →</a>
+            </div>
+          </div>
+          <div class="project-info">
+            <div class="project-tags"><span>Next.js</span><span>MongoDB</span></div>
+            <h3>Blog Platform</h3>
+            <p>A modern blogging platform with markdown support, SEO optimization and a clean reading experience.</p>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-img">
+            <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&q=80" alt="Fitness App" />
+            <div class="project-overlay">
+              <a href="#" class="project-link-btn">View Project →</a>
+            </div>
+          </div>
+          <div class="project-info">
+            <div class="project-tags"><span>React Native</span><span>API</span></div>
+            <h3>Fitness Tracker</h3>
+            <p>A mobile-first fitness tracking app with workout plans, progress charts and nutrition logging features.</p>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-img">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80" alt="Portfolio" />
+            <div class="project-overlay">
+              <a href="#" class="project-link-btn">View Project →</a>
+            </div>
+          </div>
+          <div class="project-info">
+            <div class="project-tags"><span>HTML/CSS</span><span>JS</span></div>
+            <h3>Portfolio Website</h3>
+            <p>A responsive personal portfolio website with smooth animations, dark theme and modern UI/UX design.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT ===== -->
+  <section class="section" id="contact">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">03 / Contact</span>
+        <h2 class="section-title">Get In <span class="accent">Touch</span></h2>
+      </div>
+      <div class="contact-center">
+        <p class="contact-lead">Have a project in mind? Let's work together and build something amazing.</p>
+        <div class="contact-btns">
+          <a href="https://mail.google.com/mail/u/0/#inbox" target="_blank" rel="noopener" class="contact-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            Email Me
+          </a>
+          <a href="https://github.com/CorneliusTheDev" target="_blank" rel="noopener" class="contact-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            GitHub
+          </a>
+          <a href="https://www.upwork.com/freelancers/~01465104f7e6b04236" target="_blank" rel="noopener" class="contact-btn contact-btn-upwork">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.561 13.158c-1.102 0-2.135-.467-3.074-1.227l.228-1.076.008-.042c.207-1.143.849-3.06 2.839-3.06a2.705 2.705 0 0 1 2.703 2.703 2.707 2.707 0 0 1-2.704 2.702zm0-8.25c-2.431 0-4.317 1.357-5.196 3.625l-.004-.004C12.871 7.24 11.939 6.75 10.773 6.75c-2.344 0-4.214 1.87-4.214 4.214 0 2.344 1.87 4.214 4.214 4.214 1.593 0 2.986-.895 3.713-2.21l.036-.065.038.066a5.995 5.995 0 0 0 5.28 3.156h.005c3.312 0 6-2.688 6-6s-2.688-6-6.006-6h-.078zM4.5 6.75a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9zm0 7.5a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/></svg>
+            Upwork
+          </a>
+        </div>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <a href="#" class="logo">
+        <span class="logo-bracket">&lt;</span>Dev Forges<span class="logo-bracket">/&gt;</span>
+      </a>
+      <p class="footer-copy">© 2026 Dev Forges. All rights reserved.</p>
+      <div class="footer-socials">
+        <a href="#" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        </a>
+        <a href="#" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
