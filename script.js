@@ -54,6 +54,38 @@ window.addEventListener('scroll', () => {
   setInterval(() => goTo(current + 1), 3500);
 })();
 
+// Carsale Auksion Carousel
+(function () {
+  const track = document.getElementById('carsaleTrack');
+  const dotsContainer = document.getElementById('carsaleDots');
+  if (!track) return;
+
+  const slides = track.querySelectorAll('img');
+  const total = slides.length;
+  let current = 0;
+
+  slides.forEach((_, i) => {
+    const dot = document.createElement('button');
+    dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', 'Slide ' + (i + 1));
+    dot.addEventListener('click', () => goTo(i));
+    dotsContainer.appendChild(dot);
+  });
+
+  function goTo(index) {
+    current = (index + total) % total;
+    track.style.transform = 'translateX(-' + (current * 100) + '%)';
+    dotsContainer.querySelectorAll('.carousel-dot').forEach((d, i) => {
+      d.classList.toggle('active', i === current);
+    });
+  }
+
+  document.getElementById('carsalePrev').addEventListener('click', () => goTo(current - 1));
+  document.getElementById('carsaleNext').addEventListener('click', () => goTo(current + 1));
+
+  setInterval(() => goTo(current + 1), 3500);
+})();
+
 // Project Modal
 (function () {
   const modal     = document.getElementById('projectModal');
