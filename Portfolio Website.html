@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SYNC — Co-op Adventure</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #0a0a0f;
+      --surface: #12121a;
+      --border: #1e1e2e;
+      --lime: #c8ff00;
+      --teal: #00f0c8;
+      --pink: #ff3a8c;
+      --text: #e8e8f0;
+      --muted: #666680;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* Custom Cursor */
+    .cursor {
+      position: fixed;
+      width: 12px; height: 12px;
+      background: var(--lime);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s, width 0.2s, height 0.2s, background 0.2s;
+      mix-blend-mode: difference;
+    }
+    .cursor-ring {
+      position: fixed;
+      width: 36px; height: 36px;
+      border: 1.5px solid rgba(200,255,0,0.4);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: transform 0.15s ease-out, width 0.3s, height 0.3s;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 20px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(to bottom, rgba(10,10,15,0.95), transparent);
+      backdrop-filter: blur(8px);
+    }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 4px;
+      color: var(--lime);
+      text-shadow: 0 0 20px rgba(200,255,0,0.5);
+    }
+    .nav-links {
+      display: flex; gap: 32px; list-style: none;
+    }
+    .nav-links a {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--lime); }
+    .nav-cta {
+      background: var(--lime);
+      color: #000;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border: none;
+      padding: 10px 20px;
+      cursor: none;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .nav-cta:hover { background: #fff; transform: translateY(-1px); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 120px 48px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Animated grid background */
+    .grid-bg {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(200,255,0,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(200,255,0,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      animation: gridMove 20s linear infinite;
+    }
+    @keyframes gridMove {
+      0% { background-position: 0 0; }
+      100% { background-position: 60px 60px; }
+    }
+
+    /* Glowing orbs */
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+    }
+    .orb-1 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(200,255,0,0.12), transparent 70%);
+      top: -100px; right: 200px;
+      animation: float1 8s ease-in-out infinite;
+    }
+    .orb-2 {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(0,240,200,0.1), transparent 70%);
+      bottom: 0; right: -100px;
+      animation: float2 10s ease-in-out infinite;
+    }
+    .orb-3 {
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(255,58,140,0.08), transparent 70%);
+      top: 30%; left: 40%;
+      animation: float1 12s ease-in-out infinite reverse;
+    }
+    @keyframes float1 {
+      0%, 100% { transform: translateY(0px) translateX(0px); }
+      33% { transform: translateY(-30px) translateX(20px); }
+      66% { transform: translateY(20px) translateX(-15px); }
+    }
+    @keyframes float2 {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-40px); }
+    }
+
+    .hero-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 24px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      opacity: 0;
+      animation: fadeUp 0.8s forwards 0.2s;
+    }
+    .hero-label::before {
+      content: '';
+      display: block;
+      width: 32px; height: 1px;
+      background: var(--teal);
+    }
+
+    .hero-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(80px, 14vw, 200px);
+      line-height: 0.88;
+      letter-spacing: -2px;
+      position: relative;
+      opacity: 0;
+      animation: fadeUp 0.8s forwards 0.4s;
+    }
+    .hero-title span.accent {
+      color: var(--lime);
+      display: block;
+      -webkit-text-stroke: 0px;
+      text-shadow: 0 0 40px rgba(200,255,0,0.4);
+    }
+    .hero-title span.outline {
+      -webkit-text-stroke: 2px rgba(255,255,255,0.2);
+      color: transparent;
+      display: block;
+    }
+
+    .hero-sub {
+      margin-top: 32px;
+      font-size: 18px;
+      color: var(--muted);
+      max-width: 480px;
+      line-height: 1.6;
+      font-weight: 300;
+      opacity: 0;
+      animation: fadeUp 0.8s forwards 0.6s;
+    }
+
+    .hero-buttons {
+      margin-top: 48px;
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      opacity: 0;
+      animation: fadeUp 0.8s forwards 0.8s;
+    }
+    .btn-primary {
+      background: var(--lime);
+      color: #000;
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border: none;
+      padding: 16px 36px;
+      cursor: none;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s;
+    }
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: #fff;
+      transform: translateX(-100%);
+      transition: transform 0.3s;
+    }
+    .btn-primary:hover::before { transform: translateX(0); }
+    .btn-primary span { position: relative; z-index: 1; }
+    .btn-primary:hover { transform: translateY(-2px); }
+
+    .btn-secondary {
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: none;
+      border: 1px solid var(--border);
+      padding: 15px 28px;
+      cursor: none;
+      transition: color 0.2s, border-color 0.2s, transform 0.2s;
+    }
+    .btn-secondary:hover { color: var(--text); border-color: var(--muted); transform: translateY(-2px); }
+
+    /* Player count badge */
+    .player-badge {
+      position: absolute;
+      bottom: 60px; right: 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+      opacity: 0;
+      animation: fadeUp 0.8s forwards 1s;
+    }
+    .player-avatars {
+      display: flex;
+    }
+    .avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 2px solid var(--bg);
+      margin-left: -10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+    .avatar:first-child { margin-left: 0; }
+    .a1 { background: #3a7bd5; }
+    .a2 { background: #e91e8c; }
+    .a3 { background: #f5a623; }
+    .a4 { background: #7ed321; }
+    .player-text {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+    .player-text strong { color: var(--lime); }
+
+    /* Scroll indicator */
+    .scroll-hint {
+      position: absolute;
+      bottom: 40px;
+      left: 48px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--muted);
+      text-transform: uppercase;
+      opacity: 0;
+      animation: fadeUp 0.8s forwards 1.2s;
+    }
+    .scroll-line {
+      width: 40px; height: 1px;
+      background: var(--muted);
+      position: relative;
+      overflow: hidden;
+    }
+    .scroll-line::after {
+      content: '';
+      position: absolute;
+      left: -100%;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--lime);
+      animation: scrollLine 2s ease-in-out infinite;
+    }
+    @keyframes scrollLine {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* FEATURES */
+    .features {
+      padding: 120px 48px;
+      position: relative;
+    }
+    .section-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--pink);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 24px; height: 1px;
+      background: var(--pink);
+    }
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(40px, 6vw, 80px);
+      line-height: 0.95;
+      margin-bottom: 80px;
+    }
+    .section-title em {
+      font-style: normal;
+      color: var(--lime);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+    .feature-card {
+      background: var(--surface);
+      padding: 40px;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s;
+      border: 1px solid var(--border);
+    }
+    .feature-card:hover { background: #16161f; }
+    .feature-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 0; height: 2px;
+      background: var(--lime);
+      transition: width 0.4s ease;
+    }
+    .feature-card:hover::after { width: 100%; }
+
+    .feature-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 80px;
+      color: rgba(200,255,0,0.06);
+      line-height: 1;
+      position: absolute;
+      top: 20px; right: 20px;
+    }
+    .feature-icon {
+      font-size: 32px;
+      margin-bottom: 20px;
+      display: block;
+    }
+    .feature-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+      color: var(--text);
+    }
+    .feature-desc {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* MODES */
+    .modes {
+      padding: 80px 48px 120px;
+    }
+    .modes-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 60px;
+    }
+    .mode-card {
+      border: 1px solid var(--border);
+      padding: 48px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s, transform 0.3s;
+      background: linear-gradient(135deg, var(--surface), var(--bg));
+    }
+    .mode-card:hover {
+      border-color: var(--lime);
+      transform: translateY(-4px);
+    }
+    .mode-card.featured {
+      border-color: var(--lime);
+      background: linear-gradient(135deg, rgba(200,255,0,0.06), var(--bg));
+    }
+    .mode-tag {
+      display: inline-block;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      background: var(--lime);
+      color: #000;
+      margin-bottom: 24px;
+    }
+    .mode-tag.alt { background: var(--teal); }
+    .mode-num {
+      position: absolute;
+      top: 40px; right: 40px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 120px;
+      color: rgba(255,255,255,0.03);
+      line-height: 1;
+    }
+    .mode-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 48px;
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+    }
+    .mode-desc {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.6;
+      max-width: 360px;
+    }
+    .mode-players {
+      margin-top: 32px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--teal);
+      letter-spacing: 1px;
+    }
+
+    /* TICKER */
+    .ticker {
+      padding: 20px 0;
+      background: var(--lime);
+      overflow: hidden;
+      position: relative;
+    }
+    .ticker-track {
+      display: flex;
+      gap: 0;
+      animation: tick 20s linear infinite;
+      white-space: nowrap;
+    }
+    .ticker-item {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px;
+      letter-spacing: 3px;
+      color: #000;
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .ticker-item::after {
+      content: '✦';
+      font-size: 10px;
+    }
+    @keyframes tick {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* STEAM CTA */
+    .steam-cta {
+      padding: 120px 48px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .steam-cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(200,255,0,0.07) 0%, transparent 70%);
+    }
+    .cta-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(60px, 10vw, 130px);
+      line-height: 0.9;
+      position: relative;
+    }
+    .cta-title span { color: var(--lime); }
+    .cta-sub {
+      font-size: 16px;
+      color: var(--muted);
+      margin: 24px auto 48px;
+      max-width: 480px;
+      position: relative;
+    }
+    .steam-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--lime);
+      color: #000;
+      font-family: 'Space Mono', monospace;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border: none;
+      padding: 20px 48px;
+      cursor: none;
+      position: relative;
+      z-index: 1;
+      transition: transform 0.2s, background 0.2s;
+    }
+    .steam-btn:hover { transform: scale(1.04); background: #fff; }
+    .steam-icon { font-size: 20px; }
+
+    /* FOOTER */
+    footer {
+      padding: 40px 48px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 4px;
+      color: var(--lime);
+    }
+    .footer-text {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+    .footer-links a {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 1px;
+      color: var(--muted);
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--lime); }
+
+    /* Demo badge */
+    .demo-badge {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(18,18,26,0.9);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+      padding: 10px 20px;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--muted);
+      text-transform: uppercase;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .demo-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--lime);
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.7); }
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      nav { padding: 16px 24px; }
+      .nav-links { display: none; }
+      .hero { padding: 100px 24px 80px; }
+      .features, .modes { padding: 80px 24px; }
+      .steam-cta { padding: 80px 24px; }
+      footer { padding: 32px 24px; flex-direction: column; gap: 16px; text-align: center; }
+      .features-grid { grid-template-columns: 1fr; }
+      .modes-grid { grid-template-columns: 1fr; }
+      .player-badge { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">SYNC</div>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#modes">Modes</a></li>
+      <li><a href="#steam">Steam</a></li>
+    </ul>
+    <button class="nav-cta">Wishlist Now</button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="grid-bg"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <div class="hero-label">Co-op Action Adventure · Up to 4 Players</div>
+
+    <h1 class="hero-title">
+      <span class="outline">PLAY</span>
+      <span class="accent">TOGETHER</span>
+      <span class="outline">WIN BIG</span>
+    </h1>
+
+    <p class="hero-sub">
+      A chaotic, puzzle-driven co-op adventure where communication is your greatest weapon — and your biggest weakness.
+    </p>
+
+    <div class="hero-buttons">
+      <button class="btn-primary"><span>🎮 Wishlist on Steam</span></button>
+      <button class="btn-secondary">Watch Trailer</button>
+    </div>
+
+    <div class="player-badge">
+      <div class="player-avatars">
+        <div class="avatar a1">🧑</div>
+        <div class="avatar a2">👩</div>
+        <div class="avatar a3">🧔</div>
+        <div class="avatar a4">👧</div>
+      </div>
+      <div class="player-text"><strong>2,400+</strong> wishlisted</div>
+    </div>
+
+    <div class="scroll-hint">
+      <div class="scroll-line"></div>
+      Scroll to explore
+    </div>
+  </section>
+
+  <!-- TICKER -->
+  <div class="ticker">
+    <div class="ticker-track" id="ticker">
+      <div class="ticker-item">Up to 4 Players</div>
+      <div class="ticker-item">Online &amp; Local Co-op</div>
+      <div class="ticker-item">40+ Levels</div>
+      <div class="ticker-item">Procedural Chaos</div>
+      <div class="ticker-item">Cross-Platform Play</div>
+      <div class="ticker-item">Controller Support</div>
+      <div class="ticker-item">Coming Soon on Steam</div>
+      <div class="ticker-item">Up to 4 Players</div>
+      <div class="ticker-item">Online &amp; Local Co-op</div>
+      <div class="ticker-item">40+ Levels</div>
+      <div class="ticker-item">Procedural Chaos</div>
+      <div class="ticker-item">Cross-Platform Play</div>
+      <div class="ticker-item">Controller Support</div>
+      <div class="ticker-item">Coming Soon on Steam</div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <section class="features" id="features">
+    <div class="section-label">Why play SYNC</div>
+    <h2 class="section-title">Built for <em>chaos</em><br>designed for <em>fun</em></h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <span class="feature-num">01</span>
+        <span class="feature-icon">🔗</span>
+        <div class="feature-title">Stay in Sync</div>
+        <p class="feature-desc">Every player controls one part of the machine. Nobody wins alone. Coordinate or collapse — the choice is yours.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-num">02</span>
+        <span class="feature-icon">🌀</span>
+        <div class="feature-title">Dynamic Levels</div>
+        <p class="feature-desc">Environments shift and evolve mid-run. No two sessions play the same. Always fresh, always unpredictable.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-num">03</span>
+        <span class="feature-icon">🎤</span>
+        <div class="feature-title">Voice Puzzles</div>
+        <p class="feature-desc">Some doors only open when your whole team shouts together. Literally. Use your mic or panic in silence.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-num">04</span>
+        <span class="feature-icon">⚡</span>
+        <div class="feature-title">Power-Up Combos</div>
+        <p class="feature-desc">Stack abilities with your teammates for wild effect combinations. Some combos are OP. We left them in on purpose.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-num">05</span>
+        <span class="feature-icon">🏆</span>
+        <div class="feature-title">Ranked Runs</div>
+        <p class="feature-desc">Compete on global leaderboards. Time your runs, rate your team's sync score, and climb the ladder together.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-num">06</span>
+        <span class="feature-icon">🛋️</span>
+        <div class="feature-title">Couch &amp; Online</div>
+        <p class="feature-desc">Split-screen local coop or full online matchmaking. Works with any controller. Works with keyboards too, we guess.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODES -->
+  <section class="modes" id="modes">
+    <div class="section-label">Game Modes</div>
+    <h2 class="section-title">Pick your<br><em>play style</em></h2>
+    <div class="modes-grid">
+      <div class="mode-card featured">
+        <div class="mode-tag">Most Popular</div>
+        <div class="mode-num">01</div>
+        <div class="mode-title">Story Mode</div>
+        <p class="mode-desc">Follow an absurd narrative through 8 worlds, each with unique mechanics and a boss that will test your teamwork to the limit.</p>
+        <div class="mode-players">👥 2–4 Players · ~12 Hours</div>
+      </div>
+      <div class="mode-card">
+        <div class="mode-tag alt">Competitive</div>
+        <div class="mode-num">02</div>
+        <div class="mode-title">Speed Run</div>
+        <p class="mode-desc">Race against other teams in real time. Same map, same chaos, one winner. Upload your run and let the world judge.</p>
+        <div class="mode-players">👥 2 Players · Endless</div>
+      </div>
+      <div class="mode-card">
+        <div class="mode-tag alt">Endless</div>
+        <div class="mode-num">03</div>
+        <div class="mode-title">Survival</div>
+        <p class="mode-desc">How long can your team hold out? Waves of increasingly unhinged scenarios until someone inevitably betrays the group.</p>
+        <div class="mode-players">👥 2–4 Players · Endless</div>
+      </div>
+      <div class="mode-card">
+        <div class="mode-tag">New</div>
+        <div class="mode-num">04</div>
+        <div class="mode-title">Party Mode</div>
+        <p class="mode-desc">Mini-games, mayhem, and absolutely no skill required. Perfect for people who just want to press buttons and scream.</p>
+        <div class="mode-players">👥 2–4 Players · 30 Min</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STEAM CTA -->
+  <section class="steam-cta" id="steam">
+    <h2 class="cta-title">Ready to<br><span>SYNC UP?</span></h2>
+    <p class="cta-sub">Add to your wishlist and be the first to know when we launch. Your friends need you.</p>
+    <button class="steam-btn">
+      <span class="steam-icon">🎮</span>
+      Wishlist on Steam
+    </button>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">SYNC</div>
+    <div class="footer-text">© 2025 Sync Studios — Demo Preview</div>
+    <div class="footer-links">
+      <a href="#">Press Kit</a>
+      <a href="#">Discord</a>
+      <a href="#">Twitter</a>
+      <a href="#">Contact</a>
+    </div>
+  </footer>
+
+  <!-- Demo badge -->
+  <div class="demo-badge">
+    <div class="demo-dot"></div>
+    Prototype — Not final product
+  </div>
+
+  <script>
+    // Custom cursor
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursorRing');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      cursor.style.left = mx + 'px';
+      cursor.style.top = my + 'px';
+    });
+
+    (function animRing() {
+      rx += (mx - rx) * 0.12;
+      ry += (my - ry) * 0.12;
+      ring.style.left = rx + 'px';
+      ring.style.top = ry + 'px';
+      requestAnimationFrame(animRing);
+    })();
+
+    document.querySelectorAll('button, a, .feature-card, .mode-card').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursor.style.width = '20px';
+        cursor.style.height = '20px';
+        cursor.style.background = '#fff';
+      });
+      el.addEventListener('mouseleave', () => {
+        cursor.style.width = '12px';
+        cursor.style.height = '12px';
+        cursor.style.background = 'var(--lime)';
+      });
+    });
+
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.style.opacity = '1';
+          e.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.feature-card, .mode-card').forEach((el, i) => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(32px)';
+      el.style.transition = `opacity 0.6s ${i * 0.08}s, transform 0.6s ${i * 0.08}s`;
+      observer.observe(el);
+    });
+  </script>
+</body>
+</html>
