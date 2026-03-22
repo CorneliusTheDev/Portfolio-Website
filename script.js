@@ -147,8 +147,9 @@ window.addEventListener('scroll', () => {
     if (e.key === 'ArrowRight') goTo(current + 1);
   });
 
-  // Attach click to every project card
+  // Attach click to every project card (skip <a> link cards — they navigate directly)
   document.querySelectorAll('.project-card').forEach(card => {
+    if (card.tagName === 'A' && card.getAttribute('href')) return;
     card.addEventListener('click', () => {
       const srcs = Array.from(card.querySelectorAll('.carousel-track img, .project-img img'))
         .map(img => img.src);
