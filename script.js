@@ -172,3 +172,38 @@ document.querySelectorAll('.project-card, .contact-item, .skill-item').forEach(e
   observer.observe(el);
 });
 
+// See More / See Less
+(function () {
+  const LIMIT = 6;
+  const grid = document.querySelector('.projects-grid');
+  const seeMoreWrap = document.getElementById('seeMoreWrap');
+  const seeMoreBtn = document.getElementById('seeMoreBtn');
+  if (!grid || !seeMoreWrap || !seeMoreBtn) return;
+
+  const allCards = Array.from(grid.querySelectorAll('.project-card'));
+  if (allCards.length <= LIMIT) return; // all fit, no button needed
+
+  // Move extra cards into a separate expandable grid
+  const extraGrid = document.createElement('div');
+  extraGrid.className = 'projects-extra-grid';
+  extraGrid.id = 'projectsExtraGrid';
+  allCards.slice(LIMIT).forEach(card => extraGrid.appendChild(card));
+  grid.parentNode.insertBefore(extraGrid, seeMoreWrap);
+
+  // Observe extra cards for scroll reveal when they open
+  extraGrid.querySelectorAll('.project-card').forEach(card => {
+    card.classList.add('reveal');
+    observer.observe(card);
+  });
+
+  seeMoreWrap.style.display = 'flex';
+
+  let expanded = false;
+  seeMoreBtn.addEventListener('click', () => {
+    expanded = !expanded;
+    extraGrid.classList.toggle('open', expanded);
+    seeMoreBtn.classList.toggle('open', expanded);
+    seeMoreBtn.querySelector('.btn-see-more-text').textContent = expanded ? 'See Less' : 'See More Projects';
+  });
+})();
+

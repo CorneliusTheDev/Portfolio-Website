@@ -833,6 +833,68 @@ img { display: block; width: 100%; height: 100%; object-fit: cover; }
   transform: translateY(-6px) scale(1.02);
 }
 
+/* ===== SEE MORE BUTTON ===== */
+.see-more-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.btn-see-more {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: 1.5px solid rgba(99,102,241,0.4);
+  color: var(--text);
+  padding: 13px 32px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.3s, color 0.3s, background 0.3s;
+  letter-spacing: 0.02em;
+}
+
+.btn-see-more:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(99,102,241,0.07);
+}
+
+.btn-see-more svg {
+  transition: transform 0.35s ease;
+}
+
+.btn-see-more.open svg {
+  transform: rotate(180deg);
+}
+
+/* Extra cards grid — expands downward */
+.projects-extra-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.65s ease, margin-top 0.35s ease, opacity 0.4s ease;
+  opacity: 0;
+  margin-top: 0;
+}
+
+.projects-extra-grid.open {
+  max-height: 4000px;
+  opacity: 1;
+  margin-top: 24px;
+}
+
+@media (max-width: 640px) {
+  .projects-extra-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ===== SCROLL REVEAL ===== */
 .reveal {
   opacity: 0;
