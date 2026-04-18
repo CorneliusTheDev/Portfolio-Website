@@ -251,6 +251,50 @@ img { display: block; width: 100%; height: 100%; object-fit: cover; }
   background: var(--bg-dark);
 }
 
+.section-stats {
+  padding: 60px 0;
+  background: var(--bg-dark);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 40px 24px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  text-align: center;
+  transition: border-color 0.3s, transform 0.3s;
+}
+
+.stat-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-4px);
+}
+
+.stat-number {
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
 .section-header {
   margin-bottom: 60px;
 }
@@ -441,6 +485,30 @@ img { display: block; width: 100%; height: 100%; object-fit: cover; }
   line-height: 1.6;
 }
 
+.project-stack {
+  margin-top: 10px;
+  font-size: 0.78rem;
+  color: var(--accent);
+  font-weight: 500;
+  letter-spacing: 0.03em;
+}
+
+.badge-coming-soon {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 10;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.2);
+  letter-spacing: 0.04em;
+  backdrop-filter: blur(6px);
+}
+
 /* ===== FEATURED PROJECT ===== */
 .projects-grid--single {
   grid-template-columns: repeat(3, 1fr);
@@ -538,9 +606,16 @@ img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .contact-lead {
   font-size: 1.1rem;
   color: var(--text-muted);
-  margin-bottom: 36px;
+  margin-bottom: 12px;
   max-width: 340px;
   line-height: 1.7;
+}
+
+.contact-availability {
+  font-size: 0.85rem;
+  color: var(--accent);
+  margin-bottom: 32px;
+  font-weight: 500;
 }
 
 .contact-items {
@@ -935,6 +1010,10 @@ img { display: block; width: 100%; height: 100%; object-fit: cover; }
 
   .skills-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
   }
 
   .footer-inner {
